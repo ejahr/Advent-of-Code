@@ -3,7 +3,7 @@ use regex::Regex;
 
 fn read_input_to_string() -> String{
     let path = "input/day02.txt";
-    return fs::read_to_string(path).unwrap();
+    fs::read_to_string(path).unwrap()
 }
 
 fn game_is_possible(game: &str) -> bool {
@@ -11,12 +11,14 @@ fn game_is_possible(game: &str) -> bool {
     let max_green = 13;
     let max_blue = 14;
 
+    // extract number of cubes and corresponding color
     let re = Regex::new(r"(\d+) (red|green|blue)").unwrap();
     let matches: Vec<_> = re.captures_iter(game).map(|m| {
         let (_, [number, color]) = m.extract();
         (number, color)
     }).collect();
 
+    // check if any number of cubes exceeds corresponding max value
     for (number, color) in matches{
         match color {
             "red" => if number.parse::<i32>().unwrap() > max_red {return false},
@@ -25,23 +27,49 @@ fn game_is_possible(game: &str) -> bool {
             _=> print!("no color found")
         }
     }
-
     return true
 }
 
+fn find_min_number_of_cubes(game: &str, color: &str) -> i32{
+    let expression= ["([0-9]+) ", color].concat();
+    let re = Regex::new(&expression[..]).unwrap();
+    let cubes: Vec<_> = re.captures_iter(game).map(|m| {
+            let (_, [number]) = m.extract();
+            number.parse::<i32>().unwrap()
+        }).collect();
 
-pub fn solve_part1() -> u32 {
+    *cubes.iter().max().unwrap()
+}
 
+fn power_of_fewest_number_of_cubes(game: &str) -> i32 {
+    let min_red_cubes = find_min_number_of_cubes(game, "red");
+    let min_green_cubes = find_min_number_of_cubes(game, "green");
+    let min_blue_cubes = find_min_number_of_cubes(game, "blue");
+
+    min_red_cubes * min_blue_cubes * min_green_cubes
+}
+
+
+pub fn solve_part1() -> i32 {
     let input = read_input_to_string();
-    //let input = "Game 1: 3 blue, 4 red; 1 red, 2 green, 6 blue; 2 green\nGame 2: 1 blue, 2 green; 3 green, 4 blue, 1 red; 1 green, 1 blue\nGame 3: 8 green, 6 blue, 20 red; 5 blue, 4 red, 13 green; 5 green, 1 red\nGame 5: 6 red, 1 blue, 3 green; 2 blue, 1 red, 2 green\n";
 
     let mut sum = 0;
     for game in input.lines(){
         if game_is_possible(game) {
             let re = Regex::new(r"\d+").unwrap();
             let game_id = re.find(game).unwrap().as_str();
-            sum += game_id.parse::<u32>().unwrap();
+            sum += game_id.parse::<i32>().unwrap();
         }
+    }
+    sum
+}
+
+pub fn solve_part2() -> i32 {
+    let input = read_input_to_string();
+
+    let mut sum = 0;
+    for game in input.lines(){
+        sum += power_of_fewest_number_of_cubes(game);
     }
     sum
 }
