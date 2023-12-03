@@ -26,29 +26,28 @@ fn find_calibration_value(line: &str) -> u32 {
 
 fn find_true_calibration_value(line: &str) -> u32 {
     let numbers:HashMap<&str, u32> = HashMap::from([
-        ("zero", 0), ("one", 1), ("two", 2), ("three", 3),
-        ("four", 4), ("five", 5), ("six", 6), ("seven", 7),
-        ("eight", 8), ("nine", 9),
+        ("one", 1), ("two", 2), ("three", 3), ("four", 4), ("five", 5),
+        ("six", 6), ("seven", 7), ("eight", 8), ("nine", 9),
     ]);
 
-    // find first and last occurrence of a number as a digit or word
-    let mut first_digit = (line.len(), 0);  // (index, value)
-    let mut last_digit = (0, 0);            // (index, value)
-    for (index,_c) in line.chars().enumerate(){
-        for (word, value) in numbers.iter(){
-            if line[index..].starts_with(word)
-                || line[index..].starts_with(char::from_digit(*value, 10).unwrap()) {
-                if index < first_digit.0 {
-                    first_digit = (index, *value)
-                }
-                if index >= last_digit.0 {
-                    last_digit = (index, *value)
+    // find all occurrences of a number as a digit or word
+    let mut digits:Vec<u32> = vec![];
+    for (index,c) in line.chars().enumerate(){
+        // check if c is digit or if substring starts with a written number
+        if c.is_digit(10){
+            digits.push(c.to_digit(10).unwrap());
+        } else {
+            for (number, digit) in numbers.iter() {
+                if line[index..].starts_with(number){
+                    digits.push(*digit);
+                    break
                 }
             }
         }
     }
 
-    (first_digit.1 * 10 + last_digit.1) as u32
+    // take first and last digit to form calibration value
+    (digits[0] * 10 + digits[digits.len() - 1]) as u32
 }
 
 pub fn solve_part1() -> u32 {
@@ -68,5 +67,6 @@ pub fn solve_part2() -> u32 {
     for line in input.lines(){
         sum += find_true_calibration_value(line);
     }
+
     sum
 }
