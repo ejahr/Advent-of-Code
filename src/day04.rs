@@ -7,15 +7,16 @@ fn read_input_to_string() -> String{
     fs::read_to_string(path).unwrap()
 }
 
-fn winning_and_your_numbers(card: &str) -> (Vec<i32>, Vec<i32>){
+fn winning_and_your_numbers(card: &str) -> (HashSet<i32>, HashSet<i32>){
+    // card 1: 2 | 2 3 -> [ card 1 ], [ 1 ], [ 2 3 ]
     let parts: Vec<&str> = card.split(|c| c == ':' || c == '|').collect();
 
-    let winning_numbers: Vec<i32> = parts[1].split_whitespace()
+    let winning_numbers: HashSet<i32> = parts[1].split_whitespace()
         .map(|m| {
             m.parse::<i32>().unwrap()
         }).collect();
 
-    let your_numbers: Vec<i32> = parts[2].split_whitespace()
+    let your_numbers: HashSet<i32> = parts[2].split_whitespace()
         .map(|m| {
             m.parse::<i32>().unwrap()
         }).collect();
@@ -24,9 +25,7 @@ fn winning_and_your_numbers(card: &str) -> (Vec<i32>, Vec<i32>){
 }
 
 fn calculate_points(card: &str) -> i32 {
-    let (winning_numbers, your_numbers) = winning_and_your_numbers(card);
-    let winning:HashSet<i32> = HashSet::from_iter(winning_numbers.iter().cloned());
-    let yours:HashSet<i32> = HashSet::from_iter(your_numbers.iter().cloned());
+    let (winning, yours) = winning_and_your_numbers(card);
 
     let intersection:HashSet<_> = yours.intersection(&winning).collect();
 
