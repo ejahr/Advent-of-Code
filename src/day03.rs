@@ -1,5 +1,4 @@
 use std::fs;
-use regex::Regex;
 
 fn read_input_to_string() -> String{
     let path = "input/day02.txt";

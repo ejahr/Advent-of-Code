@@ -1,11 +1,7 @@
 
 mod day01;
 mod day02;
-<<<<<<< HEAD
-mod day03;
-=======
 mod day04;
->>>>>>> 6b3a5fec5a5ef6cded34d2238ec4a7a4797428e9
 
 fn main() {
     // day 1
