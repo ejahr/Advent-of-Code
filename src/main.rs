@@ -14,4 +14,5 @@ fn main() {
 
     // day 4
     println!("result day 4 part 1: {}", day04::solve_part1());
+    println!("result day 4 part 2: {}", day04::solve_part2());
 }
