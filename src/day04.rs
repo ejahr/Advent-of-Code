@@ -4,19 +4,19 @@
 use std::fs;
 use std::collections::HashSet;
 
-fn read_input_to_string() -> String{
+fn read_input_to_string() -> String {
     let path = "input/day04.txt";
     fs::read_to_string(path).unwrap()
 }
 
-fn get_set_from_string(numbers: &str) -> HashSet<i32>{
+fn get_set_from_string(numbers: &str) -> HashSet<i32> {
     numbers.split_whitespace()
         .map(|m| {
             m.parse::<i32>().unwrap()
         }).collect()
 }
 
-fn winning_and_your_numbers(card: &str) -> (i32, HashSet<i32>, HashSet<i32>){
+fn winning_and_your_numbers(card: &str) -> (i32, HashSet<i32>, HashSet<i32>) {
     // card 1: 2 | 2 3 -> [ card 1 ], [ 1 ], [ 2 3 ]
     let split: Vec<&str> = card.split(|c| c == ':' || c == '|').collect();
     let winning_numbers: HashSet<i32> = get_set_from_string(split[1]);

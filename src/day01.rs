@@ -1,7 +1,7 @@
 use std::fs;
 use std::collections::HashMap;
 
-fn read_input_to_string() -> String{
+fn read_input_to_string() -> String {
     let path = "input/day01.txt";
     return fs::read_to_string(path).unwrap();
 }
