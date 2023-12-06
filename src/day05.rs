@@ -48,6 +48,7 @@ humidity-to-location map:
 56 93 4";
     let input = fs::read_to_string(path).unwrap();
 
+    //let (first_line, remainder) = input.split_once("\n\n").unwrap();
     let (first_line, remainder) = input.split_once("\r\n\r\n").unwrap();
 
     let seeds: Vec<i64> = get_seeds(first_line);
@@ -57,7 +58,6 @@ humidity-to-location map:
 }
 
 fn get_seeds(first_line: &str) -> Vec<i64> {
-    println!("first line {}", first_line);
     first_line.split_once(": ").unwrap().1       // get only string of numbers
         .split_whitespace()
         .map(|m| { m.parse::<i64>().unwrap() })
@@ -69,10 +69,12 @@ fn get_maps(remainder: &str) -> Vec<Vec<Vec<i64>>> {
 
     // iterate over individual maps
     for map_as_string in remainder.split("\r\n\r\n"){
+    //for map_as_string in remainder.split("\n\n"){
         let mut map_as_vec: Vec<Vec<i64>> = Vec::new();
 
         // iterate only over lines containing numbers
         for line in map_as_string.split_once(":\r\n").unwrap().1.lines() {
+        //for line in map_as_string.split_once(":\n").unwrap().1.lines() {
             map_as_vec.push( line.split_whitespace()
                 .map(|m| { m.parse::<i64>().unwrap() })
                 .collect::<Vec<i64>>()
@@ -106,11 +108,32 @@ fn get_location_of_seeds(seeds: Vec<i64>, maps: Vec<Vec<Vec<i64>>> ) -> Vec<i64>
     converted_seeds
 }
 
-
+fn get_seeds_from_ranges(seed_ranges: Vec<i64>) -> Vec<i64>{
+    let mut seeds = Vec::new();
+    //println!("seed_ranges {:?}", seed_ranges);
+    for i in (0..seed_ranges.len()).step_by(2){
+        //println!("i {}", i);
+        for s in seed_ranges[i]..seed_ranges[i]+seed_ranges[i+1]{
+            seeds.push(s);
+        }
+    }
+    //println!("seeds {:?}", seeds);
+    seeds
+}
 
 
 pub fn solve_part1() -> i64 {
     let (seeds, maps) = read_input();
+
+    let locations = get_location_of_seeds(seeds, maps);
+
+    *locations.iter().min().unwrap()
+}
+
+pub fn solve_part2() -> i64 {
+    let (seed_ranges, maps) = read_input();
+
+    let seeds = get_seeds_from_ranges(seed_ranges);
 
     let locations = get_location_of_seeds(seeds, maps);
 
