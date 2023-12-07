@@ -67,14 +67,14 @@ fn get_location_of_seed(seed: i64, maps: &Vec<Vec<Vec<i64>>>) -> i64 {
 pub fn solve_part1() -> i64 {
     let (seeds, maps) = read_input();
 
-    let locations =  seeds.iter()
+    let locations: Vec<i64> =  seeds.iter()
         .map( |i| get_location_of_seed(i.clone(), &maps) )
         .collect();
 
     *locations.iter().min().unwrap()
 }
 
-pub fn solve_part2() -> i64 {
+pub fn _solve_part2() -> i64 {
     let (seed_ranges, maps) = read_input();
 
     let mut threads: Vec<JoinHandle<i64>> = Vec::new();
