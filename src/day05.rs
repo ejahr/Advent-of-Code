@@ -32,7 +32,7 @@ fn get_seeds(first_line: &str) -> Vec<i64> {
 fn get_maps(remainder: &str) -> Vec<Vec<Vec<i64>>> {
     let mut maps: Vec<Vec<Vec<i64>>> = Vec::new();
     // iterate over individual maps
-    for map_as_string in remainder.split("\r\n\r\n"){
+    for map_as_string in remainder.split("\r\n\r\n") {
         let mut map_as_vec: Vec<Vec<i64>> = Vec::new();
         // iterate only over lines containing numbers
         for line in map_as_string.split_once(":\r\n").unwrap().1.lines() {
@@ -50,7 +50,7 @@ fn get_maps(remainder: &str) -> Vec<Vec<Vec<i64>>> {
 fn convert(number: &i64, map: &Vec<Vec<i64>>) -> i64 {
     for sub_map in map {
         if (number >= &sub_map[1]) && (number <= &(sub_map[1] + sub_map[2])) {
-            return number + sub_map[0] - sub_map[1]
+            return number + sub_map[0] - sub_map[1];
         }
     }
     *number
@@ -67,8 +67,8 @@ fn get_location_of_seed(seed: i64, maps: &Vec<Vec<Vec<i64>>>) -> i64 {
 pub fn solve_part1() -> i64 {
     let (seeds, maps) = read_input();
 
-    let locations: Vec<i64> =  seeds.iter()
-        .map( |i| get_location_of_seed(i.clone(), &maps) )
+    let locations: Vec<i64> = seeds.iter()
+        .map(|i| get_location_of_seed(i.clone(), &maps))
         .collect();
 
     *locations.iter().min().unwrap()
