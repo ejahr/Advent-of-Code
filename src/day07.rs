@@ -57,7 +57,7 @@ fn compare_hands(first: &([char; 5], i32), second: &([char; 5], i32)) -> Orderin
 }
 
 pub fn solve_part1() -> i32 {
-    let input = "32T3K 765
+    let _input = "32T3K 765
 T55J5 684
 KK677 28
 KTJJT 220
