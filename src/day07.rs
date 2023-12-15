@@ -7,7 +7,6 @@ use std::io::Read;
 
 const ORDER: [char; 13] = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A'];
 
-
 fn get_hands_and_bets(input: &str) -> Vec<([char; 5], i32)> {
     input.lines()
         .map(|m| m.split_once(' ').unwrap())

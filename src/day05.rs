@@ -74,7 +74,7 @@ pub fn solve_part1() -> i64 {
     *locations.iter().min().unwrap()
 }
 
-pub fn _solve_part2() -> i64 {
+pub fn solve_part2() -> i64 {
     let (seed_ranges, maps) = read_input();
 
     let mut threads: Vec<JoinHandle<i64>> = Vec::new();
