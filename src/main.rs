@@ -37,6 +37,7 @@ fn main() {
         }
         8 => {
             println!("result day 8 part 1: {}", day08::solve_part1());
+            println!("result day 8 part 2: {}", day08::solve_part2());
         }
 
         _ => {println!("no day specified")}
