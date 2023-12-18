@@ -12,6 +12,7 @@ fn get_sum_of_next_values(input: &str) -> i64 {
     sum
 }
 
+// analogous if we flip the history around (or equally, reverse the coefficients)
 fn get_sum_of_previous_values(input: &str) -> i64 {
     let histories = get_histories(input);
 
@@ -47,6 +48,9 @@ fn get_coefficients(n: i64) -> Vec<i64>{
     coefficients
 }
 
+// a b -> - a + 2b
+// a b c -> a - 3b - 3c
+// a b c d -> - a + 4b - 6c + 4d
 fn get_next_value(history: &Vec<i64>, coefficients: &Vec<i64>) -> i64 {
     // dot product of both vectors
     history.iter().zip(coefficients.iter())
