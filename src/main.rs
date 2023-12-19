@@ -7,10 +7,11 @@ mod day06;
 mod day07;
 mod day08;
 mod day09;
+mod day10;
 
 fn main() {
 
-    let day = 9;
+    let day = 10;
 
     match day {
         1 => {
@@ -43,6 +44,10 @@ fn main() {
         9 => {
             println!("result day 9 part 1: {}", day09::solve_part1());
             println!("result day 9 part 2: {}", day09::solve_part2());
+        }
+        10 => {
+            println!("result day 10 part 1: {}", day10::solve_part1());
+            //println!("result day 9 part 2: {}", day09::solve_part2());
         }
 
         _ => {println!("no day specified")}
