@@ -2,17 +2,9 @@ use std::fs;
 use array2d::Array2D;
 
 fn array2d_from_input() -> Array2D<char> {
-
-    let input = "7-F7-
-.FJ|7
-SJLL7
-|F--J
-LJ.LJ";
     let input = fs::read_to_string("input/day10.txt").unwrap();
     let num_rows = input.lines().count();
     let num_col = input.lines().next().unwrap().len() + 2;
-
-    println!("{:?}", input.lines().next().unwrap());
 
     // add buffer around the maze to avoid indexing out of bound
     let input = format!(".{}.", input);
@@ -26,53 +18,49 @@ LJ.LJ";
     ).unwrap()
 }
 
-fn go_to_next_pipe(previous: (usize, usize), current: (usize, usize), maze: &Array2D<char>)
-    -> (usize, usize) {
-    let mut row = current.0 as i32;
-    let mut col = current.1 as i32;
-    // incoming direction needed identify where to go next
-    let direction = (row - previous.0 as i32, col - previous.1 as i32);
-
-    if (maze[current] == '-') || (maze[current] == '|'){
-        row += direction.0 ;
-        col += direction.1 ;
-    }
-    else if direction == (0,-1){    // left
-        if maze[current] == 'L' { row -= 1 }
-        else if maze[current] == 'F' { row += 1 }
-    }
-    else if direction == (1,0){     // down
-        if maze[current] == 'J' { col -= 1 }
-        else if maze[current] ==  'L' { col += 1 }
-    }
-    else if direction == (0,1){     // right
-        if maze[current] == '7' { row += 1 }
-        else if maze[current] == 'J' { row -= 1 }
-    }
-    else if direction == (-1,0){    // up
-        if maze[current] ==  'F' { col += 1 }
-        else if maze[current] == '7' { col -= 1 }
-    }
-    (row as usize, col as usize)
-}
-
 fn go_through_loop(maze: &Array2D<char>) -> u64 {
     let (start, mut current) = find_loop(&maze);
     let mut previous = start;
     let mut num_steps = 0;
 
-    while current != start && num_steps < 10000000 {
-        if num_steps%10000 == 0 {
-            println!("\nstep {}", num_steps);
-            println!("previous {:?}", (previous, maze[previous]));
-            println!("current {:?}", (current, maze[current]));
-        }
+    while current != start {
         let next = go_to_next_pipe(previous, current, &maze);
         previous = current;
         current = next;
         num_steps += 1;
     }
     num_steps
+}
+
+fn go_to_next_pipe(previous: (usize, usize), current: (usize, usize),
+                   maze: &Array2D<char>) -> (usize, usize) {
+    let mut row = current.0 as i32;
+    let mut col = current.1 as i32;
+    // incoming direction of current pipe
+    let direction = (row - previous.0 as i32, col - previous.1 as i32);
+
+    if (maze[current] == '-') || (maze[current] == '|'){
+        row += direction.0 ;
+        col += direction.1 ;
+    }
+    else if maze[current] == 'L' {
+        if direction == (0,-1) { row -= 1 }         // from right
+        else if direction == (1,0) { col += 1 }     // from up
+    }
+    else if maze[current] == 'F' {
+        if direction == (-1,0) { col += 1 }         // from down
+        else if direction == (0,-1) { row += 1 }    // from right
+    }
+    else if maze[current] == 'J' {
+        if direction == (0,1) { row -= 1 }          // from left
+        else if direction == (1,0) { col -= 1 }     // from up
+    }
+    else if maze[current] == '7' {
+        if direction == (0,1) { row += 1 }          // from left
+        else if direction == (-1,0) { col -= 1 }    // from down
+    }
+
+    (row as usize, col as usize)
 }
 
 fn find_loop(maze: &Array2D<char>) -> ((usize, usize), (usize, usize)) {
@@ -119,10 +107,6 @@ fn find_start(maze: &Array2D<char>) -> (usize, usize) {
 
 pub fn solve_part1() -> u64 {
     let maze = array2d_from_input();
-
-    println!("{:?}", maze.as_rows()[0]);
-
     let size_loop = go_through_loop(&maze);
-
     size_loop/2 + 1
 }
